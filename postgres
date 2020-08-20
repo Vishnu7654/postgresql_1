@@ -1,0 +1,137 @@
+postgres@vishnu-VirtualBox:/$ exit
+exit
+root@vishnu-VirtualBox:~# su postgres
+postgres@vishnu-VirtualBox:/root$ cd ..
+postgres@vishnu-VirtualBox:/$ psql
+psql (12.2 (Ubuntu 12.2-4))
+Type "help" for help.
+
+postgres=# /l
+postgres-# \l
+                             List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+-----------+----------+----------+---------+-------+-----------------------
+ postgres  | postgres | UTF8     | en_IN   | en_IN | 
+ template0 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_IN   | en_IN | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ vishnu    | postgres | UTF8     | en_IN   | en_IN | 
+(4 rows)
+
+postgres-# \c vishnu
+You are now connected to database "vishnu" as user "postgres".
+vishnu-# \d
+        List of relations
+ Schema | Name | Type  |  Owner   
+--------+------+-------+----------
+ public | emp  | table | postgres
+(1 row)
+
+vishnu-# create table student(stu_id primary key,stu_name char(20) NOT NULL,stu_age int ,stu_adr char(20));
+ERROR:  syntax error at or near "/"
+LINE 1: /l
+        ^
+vishnu=#  create table student(stu_id int  primary key,stu_name char(20) NOT NULL,stu_age int ,stu_adr char(20));
+CREATE TABLE
+vishnu=# select * from student;
+ stu_id | stu_name | stu_age | stu_adr 
+--------+----------+---------+---------
+(0 rows)
+
+vishnu=# insert into student(stu_id,stu_name,stu_age,stu_adr) values('101','vishnu','23','kadapa');
+INSERT 0 1
+vishnu=# select * from student;
+ stu_id |       stu_name       | stu_age |       stu_adr        
+--------+----------------------+---------+----------------------
+    101 | vishnu               |      23 | kadapa              
+(1 row)
+
+vishnu=# insert into student(stu_id,stu_name,stu_age,stu_adr) values('102','vardhan','22','bangalore'),('102','vardhan','22','bangalore'),
+vishnu-# insert into student(stu_id,stu_name,stu_age,stu_adr) values('102','vardhan','22','bangalore'),('103','abhi','24','vijayawada'),('104','giri','25','chennai');
+ERROR:  syntax error at or near "insert"
+LINE 2: insert into student(stu_id,stu_name,stu_age,stu_adr) values(...
+        ^
+vishnu=# insert into student(stu_id,stu_name,stu_age,stu_adr) values('102','vardhan','22','bangalore');
+INSERT 0 1
+vishnu=# select * from student;
+ stu_id |       stu_name       | stu_age |       stu_adr        
+--------+----------------------+---------+----------------------
+    101 | vishnu               |      23 | kadapa              
+    102 | vardhan              |      22 | bangalore           
+(2 rows)
+
+vishnu=# insert into student(stu_id,stu_name,stu_age,stu_adr) values('103','giri','25','bangalore'),('104','abhi','26','chennai');
+INSERT 0 2
+vishnu=# select * from student;
+ stu_id |       stu_name       | stu_age |       stu_adr        
+--------+----------------------+---------+----------------------
+    101 | vishnu               |      23 | kadapa              
+    102 | vardhan              |      22 | bangalore           
+    103 | giri                 |      25 | bangalore           
+    104 | abhi                 |      26 | chennai             
+(4 rows)
+
+vishnu=# select * from emp;
+ emp_id | emp_name | e_company_name | salary 
+--------+----------+----------------+--------
+(0 rows)
+
+vishnu=# alter table emp add column emp_project char(20));
+ERROR:  syntax error at or near ")"
+LINE 1: alter table emp add column emp_project char(20));
+                                                       ^
+vishnu=# alter table emp add column emp_project char(20);
+ALTER TABLE
+vishnu=# select * from emp;
+ emp_id | emp_name | e_company_name | salary | emp_project 
+--------+----------+----------------+--------+-------------
+(0 rows)
+
+vishnu=# alter table emp drop column e_company_name;
+ALTER TABLE
+vishnu=# select * from emp;
+ emp_id | emp_name | salary | emp_project 
+--------+----------+--------+-------------
+(0 rows)
+
+vishnu=# alter table emp rename salary to emp_salary;
+ALTER TABLE
+vishnu=# select * from emp;
+ emp_id | emp_name | emp_salary | emp_project 
+--------+----------+------------+-------------
+(0 rows)
+
+vishnu=# select * from student;
+ stu_id |       stu_name       | stu_age |       stu_adr        
+--------+----------------------+---------+----------------------
+    101 | vishnu               |      23 | kadapa              
+    102 | vardhan              |      22 | bangalore           
+    103 | giri                 |      25 | bangalore           
+    104 | abhi                 |      26 | chennai             
+(4 rows)
+
+vishnu=# update student set stu_adr='banglore';
+UPDATE 4
+vishnu=# select * from student;
+ stu_id |       stu_name       | stu_age |       stu_adr        
+--------+----------------------+---------+----------------------
+    101 | vishnu               |      23 | banglore            
+    102 | vardhan              |      22 | banglore            
+    103 | giri                 |      25 | banglore            
+    104 | abhi                 |      26 | banglore            
+(4 rows)
+
+vishnu=# update student set stu_name='siddu' where stu_name='giri';
+UPDATE 1
+vishnu=# select * from student;
+ stu_id |       stu_name       | stu_age |       stu_adr        
+--------+----------------------+---------+----------------------
+    101 | vishnu               |      23 | banglore            
+    102 | vardhan              |      22 | banglore            
+    104 | abhi                 |      26 | banglore            
+    103 | siddu                |      25 | banglore            
+(4 rows)
+
+vishnu=# 
+
